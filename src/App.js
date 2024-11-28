@@ -32,13 +32,13 @@ function App() {
       <HeroSection />
       <main id='main'>
         <About />
-        {/* <Facts /> */}
+         {/*<Facts />*/}
         <Skills />
         <Resume />
-        {/* <Portfolio /> */}
-        {/* <Service /> */}
+         {/*<Portfolio />*/}
+         {/*<Service />*/}
         {/* <Testimonial /> */}
-        {/* <Contact /> */}
+        {/* <Contact />*/}
       </main>
       <Footer />
     </>
