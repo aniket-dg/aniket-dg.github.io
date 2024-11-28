@@ -32,7 +32,7 @@ export class Header extends Component {
           {/* <a href="#" className="facebook"><i className="bx bxl-leetcode"></i></a> */}
           {/* <a href="#" className="instagram"><i className="bx bxl-instagram"></i></a> */}
           <a href="https://github.com/aniket-dg/" className="github"><i className="bx bxl-github"></i></a>
-          <a href="https://www.linkedin.com/in/aniketdg25/" className="linkedin"><i className="bx bxl-linkedin"></i></a>
+          <a href="https://www.linkedin.com/in/aniket-dg/" className="linkedin"><i className="bx bxl-linkedin"></i></a>
         </div>
       </div>
 
