@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.79e40111.css",
-    "main.js": "/static/js/main.157e5beb.js",
-    "static/js/646.c6e5f436.chunk.js": "/static/js/646.c6e5f436.chunk.js",
-    "index.html": "/index.html",
-    "main.79e40111.css.map": "/static/css/main.79e40111.css.map",
-    "main.157e5beb.js.map": "/static/js/main.157e5beb.js.map",
-    "646.c6e5f436.chunk.js.map": "/static/js/646.c6e5f436.chunk.js.map"
+    "main.css": "/aniket-dg.github.io/static/css/main.79e40111.css",
+    "main.js": "/aniket-dg.github.io/static/js/main.cc42ac82.js",
+    "static/js/646.c6e5f436.chunk.js": "/aniket-dg.github.io/static/js/646.c6e5f436.chunk.js",
+    "index.html": "/aniket-dg.github.io/index.html",
+    "main.79e40111.css.map": "/aniket-dg.github.io/static/css/main.79e40111.css.map",
+    "main.cc42ac82.js.map": "/aniket-dg.github.io/static/js/main.cc42ac82.js.map",
+    "646.c6e5f436.chunk.js.map": "/aniket-dg.github.io/static/js/646.c6e5f436.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.79e40111.css",
-    "static/js/main.157e5beb.js"
+    "static/js/main.cc42ac82.js"
   ]
 }
