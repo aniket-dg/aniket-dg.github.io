@@ -4,9 +4,23 @@ export class About extends Component {
   imgStyle = {
    
   }
+
+  calculateAge(dob) {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    // Adjust age if the birthday hasn't occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
   
   render() {
-    
+    const dob = '2001-12-25'; // Date of Birth
+    const age = this.calculateAge(dob); // Dynamically calculate age
     return (
       <>
     <section id="about" className="about">
@@ -40,17 +54,13 @@ export class About extends Component {
               </div>
               <div className="col-lg-6">
                 <ul>
-                  <li><i className="bi bi-chevron-right"></i> <strong>Age:</strong> <span>21</span></li>
-                  <li><i className="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor of Engineering (Pursuing)</span></li>
+                  <li><i className="bi bi-chevron-right"></i> <strong>Age:</strong> <span>{age}</span></li>
+                  <li><i className="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor of Engineering</span></li>
                   <li><i className="bi bi-chevron-right"></i> <strong>Specialization:</strong> <span>Information Technology</span></li>
-                  <li><i className="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
+                  {/*<li><i className="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>*/}
                 </ul>
               </div>
             </div>
-            {/* <p> */}
-              {/* Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci omnis et ut. Nulla accusantium dolor incidunt officia tempore. Et eius omnis. */}
-              {/* Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque neque. Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni laudantium dolores. */}
-            {/* </p> */}
           </div>
         </div>
 

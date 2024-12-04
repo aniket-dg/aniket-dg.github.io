@@ -32,26 +32,68 @@ export class Skills extends Component {
                   </div>
                 </div>
               </div>
+              <div className="col-sm-3">
+                <div className="card">
+                  <div className="card-body">
+                    <img className='skillImg' src='assets/img/rest.ico'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Django REST framework</span>
+                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+                  </div>
+                </div>
+              </div>
 
               <div className="col-sm-3">
                 <div className="card">
                   <div className="card-body">
-                    <img className='skillImg' src='https://flask.palletsprojects.com/en/2.1.x/_static/flask-icon.png'></img>
+                    <img className='skillImg' src='assets/img/celery.ico'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Celery.</span>
+                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-3">
+                <div className="card">
+                  <div className="card-body">
+                    <img className='skillImg' src='assets/img/terraform.png'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Terraform.</span>
+                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-3">
+                <div className="card">
+                  <div className="card-body">
+                    <img className='skillImg' src='assets/img/docker.png'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Docker</span>
+                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-3">
+                <div className="card">
+                  <div className="card-body">
+                    <img className='skillImg' src='assets/img/pipelines.png'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Pipelines</span>
+                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="col-sm-3">
+                <div className="card">
+                  <div className="card-body">
+                    <img className='skillImg' src='assets/img/flask.png'></img>
                     <span className="card-text">  &nbsp;&nbsp;Flask.</span>
                     {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                   </div>
                 </div>
               </div>
 
-              <div className="col-sm-3">
-                <div className="card">
-                  <div className="card-body">
-                    <img className='skillImg' src='https://www.django-rest-framework.org/img/favicon.ico'></img>
-                    <span className="card-text">  &nbsp;&nbsp;Django REST</span>
-                    {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-                  </div>
-                </div>
-              </div>
+
             </div>
 
 
@@ -113,8 +155,8 @@ export class Skills extends Component {
               <div className="col-sm-3">
                 <div className="card">
                   <div className="card-body">
-                    <img className='skillImg' src='https://www.docker.com/wp-content/uploads/2022/01/cropped-Docker-R-Logo-08-2018-Monochomatic-RGB_Moby-x1-192x192.png'></img>
-                    <span className="card-text">  &nbsp;&nbsp;Docker</span>
+                    <img className='skillImg' src='assets/img/flask.png'></img>
+                    <span className="card-text">  &nbsp;&nbsp;Flask.</span>
                     {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                   </div>
                 </div>
@@ -123,7 +165,7 @@ export class Skills extends Component {
               <div className="col-sm-3">
                 <div className="card">
                   <div className="card-body">
-                    <img className='skillImg' src='https://www.nginx.com/wp-content/uploads/2019/10/favicon-64x46.ico'></img>
+                    <img className='skillImg' src='assets/img/nginx.png'></img>
                     <span className="card-text">  &nbsp;&nbsp;Nginx.</span>
                     {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                   </div>
@@ -165,7 +207,7 @@ export class Skills extends Component {
               <div className="col-sm-3">
                 <div className="card">
                   <div className="card-body">
-                    <img className='skillImg' src='https://reactjs.org/icons/icon-72x72.png'></img>
+                    <img className='skillImg' src='assets/img/react.png'></img>
                     <span className="card-text">  &nbsp;&nbsp;React.</span>
                     {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                   </div>
@@ -175,7 +217,7 @@ export class Skills extends Component {
               <div className="col-sm-3">
                 <div className="card">
                   <div className="card-body">
-                    <img className='skillImg' src='https://nodejs.org/static/images/favicons/favicon-32x32.png'></img>
+                    <img className='skillImg' src='assets/img/node.png'></img>
                     <span className="card-text">  &nbsp;&nbsp;Node.js.</span>
                     {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
                   </div>

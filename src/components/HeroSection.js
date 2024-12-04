@@ -9,7 +9,7 @@ export class HeroSection extends Component {
     }
 
     textLines = [
-        'Blockchain Enthusiast', 'Web Developer', 'Devops Enginner','Passionate Programmer', 'Backend Developer'
+        'Web Developer', 'Devops Engineer','Passionate Programmer', 'Backend Developer'
       ];
     
   render() {
