@@ -34,7 +34,7 @@ export class About extends Component {
 
         <div className="row">
           <div className="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/profile-img.png" style={this.imgStyle} className="img-fluid" alt="" />
+            <img src="assets/img/profile-img-minimized.jpg" style={this.imgStyle} className="img-fluid" alt="" />
           </div>
           <div className="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
             <h3>Backend Developer &amp; Devops Engineer.</h3>
