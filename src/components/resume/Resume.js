@@ -19,7 +19,7 @@ export class Resume extends Component {
                                 <h3 className="resume-title">Sumary</h3>
                                 <div className="resume-item pb-0">
                                     <h4>Aniket Gavali</h4>
-                                    <p><em>Passionate and innovative Information Technology Student with 1+ years of
+                                    <p><em>Passionate and innovative Information Technology Student with 2+ years of
                                         experience designing and developing efficient backend for various web based
                                         applications.</em></p>
                                     <ul>
