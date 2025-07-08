@@ -4,7 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "https://aniket-dg.github.io",
+  base: "/",
   server: {
     host: "::",
     port: 8080,
