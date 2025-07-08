@@ -44,7 +44,7 @@ const Hero = () => {
           </div>
           
           <a 
-            href="#about" 
+            href="#backend"
             className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
           >
             <span>Scroll to learn more</span>
