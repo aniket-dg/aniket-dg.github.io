@@ -44,12 +44,13 @@ const Hero = () => {
           </div>
           
           <a 
-            href="#backend"
+            href="#backend_showcase"
             className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
           >
             <span>Scroll to learn more</span>
             <ArrowDown className="w-4 h-4 animate-bounce" />
           </a>
+
         </div>
       </div>
     </section>
