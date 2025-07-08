@@ -50,6 +50,7 @@ const Hero = () => {
             <span>Scroll to learn more</span>
             <ArrowDown className="w-4 h-4 animate-bounce" />
           </a>
+
         </div>
       </div>
     </section>
