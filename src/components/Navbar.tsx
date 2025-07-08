@@ -6,11 +6,10 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { name: "About", href: "#about" },
+  { name: "Backend", href: "#backend_showcase" },
   { name: "Experience", href: "#experience" },
   { name: "Projects", href: "#projects" },
   { name: "Skills", href: "#skills" },
-  { name: "Backend", href: "#backend" },
-  { name: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
@@ -53,7 +52,7 @@ const Navbar = () => {
               <ModeToggle />
             </div>
             <Button asChild className="ml-4">
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+              <a href="/aniket_gavali_resume.pdf" target="_blank" rel="noopener noreferrer">
                 Resume
               </a>
             </Button>

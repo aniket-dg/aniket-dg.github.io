@@ -12,7 +12,7 @@ import OTPVerificationDemo from "./OTPVerificationDemo";
 
 const InteractiveBackendShowcase = () => {
   return (
-    <section id="backend" className="py-20 bg-secondary/50">
+    <section id="backend_showcase" className="py-20 bg-secondary/50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 flex items-center">
           <span className="text-primary mr-2">•</span> Interactive Backend Showcase

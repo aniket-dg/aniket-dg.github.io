@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex flex-col justify-center items-start pt-16">
+    <section className="min-h-screen flex flex-col justify-center items-start">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl">
           <h1 className="text-sm text-primary font-medium mb-3 opacity-90">Hi, my name is</h1>
@@ -21,7 +21,7 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 mb-10">
-            <a href="mailto:aniket.dg25@gmail.com">
+            <a href="mailto:aniketgavali1225@gmail.com">
               <Button className="gap-2">
                 <Mail className="w-4 h-4" /> Contact Me
               </Button>
@@ -36,7 +36,7 @@ const Hero = () => {
                 <Linkedin className="w-4 h-4" /> LinkedIn
               </Button>
             </a>
-            <a href="https://aniketdg.me" target="_blank" rel="noopener noreferrer">
+            <a href="https://aniket-dg.github.io" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="gap-2">
                 <ExternalLink className="w-4 h-4" /> Website
               </Button>
@@ -44,7 +44,7 @@ const Hero = () => {
           </div>
           
           <a 
-            href="#about" 
+            href="#backend_showcase"
             className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
           >
             <span>Scroll to learn more</span>
