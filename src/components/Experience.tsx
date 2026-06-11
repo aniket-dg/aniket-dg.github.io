@@ -6,12 +6,28 @@ import { Badge } from "@/components/ui/badge";
 
 const experiences = [
   {
+    id: "journeyfront",
+    company: "Journeyfront",
+    role: "Senior Backend Developer",
+    location: "Remote",
+    type: "Full-Time",
+    period: "Aug 2025 - Present",
+    responsibilities: [
+      "Building and maintaining third-party HRIS integrations (via Kombo) for automated employee sync — including data normalization, webhook-driven sync triggers, and core field extraction.",
+      "Designing async task pipelines using Celery + SQS for scalable, decoupled background processing across integrations.",
+      "Implementing DB-driven dynamic field mapping systems that allow config-driven prefill for create-employee flows across vendors.",
+      "Working on job feed integrations (Indeed and others) — handling payload ingestion and processing.",
+      "Improving system observability through structured logging, query optimization, and N+1 prevention.",
+    ],
+    technologies: ["Python", "Django", "PostgreSQL", "Celery", "AWS SQS", "Redis", "Kombo API", "Vue.js", "Docker", "Terraform"],
+  },
+  {
     id: "noovosoft",
     company: "Noovosoft Technologies",
     role: "Application Developer",
     location: "Pune, MH",
     type: "Full-Time",
-    period: "Sep 2022 - Present",
+    period: "Sep 2022 - Jul 2025",
     responsibilities: [
       "Implemented an AWS Lambda function using Terraform and a NAT Gateway to overcome IP restrictions for Dumea, enabling scalable architecture and replacing legacy data connectors.",
       "Engineered automated feed management system by integrating TapFeed data, reducing manual efforts by 80%.",
@@ -36,7 +52,7 @@ const experiences = [
 ];
 
 const Experience = () => {
-  const [activeTab, setActiveTab] = useState("noovosoft");
+  const [activeTab, setActiveTab] = useState("journeyfront");
 
   return (
     <section id="experience" className="py-20 bg-secondary/50">
@@ -45,8 +61,8 @@ const Experience = () => {
           <span className="text-primary mr-2"></span> Professional Experience
         </h2>
 
-        <Tabs defaultValue="noovosoft" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-8 grid grid-cols-2 w-full max-w-md">
+        <Tabs defaultValue="journeyfront" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="mb-8 grid grid-cols-3 w-full max-w-xl">
             {experiences.map((exp) => (
               <TabsTrigger key={exp.id} value={exp.id} className="text-sm md:text-base">
                 {exp.company}

@@ -47,9 +47,9 @@ const About = () => {
                 </p>
                 
                 <p>
-                  Currently, I work as an Application Developer at Noovosoft Technologies,
-                  where I've implemented AWS Lambda functions using Terraform,
-                  engineered automated feed management systems, and mentored incoming interns.
+                  Currently, I work as a Senior Backend Developer at Journeyfront,
+                  where I build HRIS integrations, design async task pipelines with Celery and SQS,
+                  and improve system observability across a full-stack product team.
                 </p>
                 
                 <p>

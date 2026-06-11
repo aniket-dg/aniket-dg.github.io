@@ -17,11 +17,11 @@ const Hero = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mb-8">
             I'm a backend developer specializing in building robust and scalable 
             web applications. Currently focused on developing cloud-native 
-            applications at <span className="text-primary">Noovosoft Technologies</span>.
+            applications at <span className="text-primary">Journeyfront</span>.
           </p>
           
           <div className="flex flex-wrap gap-4 mb-10">
-            <a href="mailto:aniketgavali1225@gmail.com">
+            <a href="mailto:aniket.dg25@gmail.com">
               <Button className="gap-2">
                 <Mail className="w-4 h-4" /> Contact Me
               </Button>
