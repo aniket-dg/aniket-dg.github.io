@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Optimizing Sentry Performance Units | Aniket Gavali</title>
+<meta name="description" content="How unoptimized tracing quietly inflated a Sentry bill, and six practices that brought it back under control without losing real signal." />
+<meta name="author" content="Aniket Gavali" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Karla:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper: #FBF6EF;
+    --paper-raised: #FFFDF8;
+    --ink: #2B2620;
+    --ink-soft: #6B6357;
+    --ink-faint: #9B9284;
+    --line: #EDE2D0;
+    --line-strong: #DFCFAF;
+    --accent: #2F7B6B;
+    --accent-soft: #E4F1EC;
+    --accent-2: #E8A33D;
+    --accent-2-soft: #FBEDD3;
+    --bad: #C15A3E;
+    --bad-soft: #F8E7E1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1C1815; --paper-raised: #242019; --ink: #F3EDE3; --ink-soft: #C9BFAE;
+      --ink-faint: #8B8172; --line: #3A332A; --line-strong: #4A4133;
+      --accent: #5FBBA4; --accent-soft: #1E3831; --accent-2: #F0B85C; --accent-2-soft: #3A2A12;
+      --bad: #E08064; --bad-soft: #3A2119;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1C1815; --paper-raised: #242019; --ink: #F3EDE3; --ink-soft: #C9BFAE;
+    --ink-faint: #8B8172; --line: #3A332A; --line-strong: #4A4133;
+    --accent: #5FBBA4; --accent-soft: #1E3831; --accent-2: #F0B85C; --accent-2-soft: #3A2A12;
+    --bad: #E08064; --bad-soft: #3A2119;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Karla', system-ui, sans-serif; font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+
+  header.site { border-bottom: 1px solid var(--line); padding: 14px 24px; }
+  .header-row { max-width: 780px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .back-link { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; text-decoration: none; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 8px; }
+  .back-link:hover { color: var(--accent); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-link {
+    display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+    border: 1px solid var(--line); border-radius: 50%; color: var(--ink-soft); flex: none;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 13px; text-decoration: none;
+  }
+  .icon-link:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-btn {
+    font-family: 'Karla', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-soft);
+    background: var(--paper-raised); border: 1px solid var(--line); border-radius: 20px;
+    padding: 7px 14px; cursor: pointer;
+  }
+  .theme-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  article { max-width: 700px; margin: 0 auto; padding: 56px 24px 100px; }
+
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .meta-row { display: flex; gap: 14px; align-items: center; color: var(--ink-faint); font-size: 13.5px; margin-bottom: 30px; }
+  .meta-row .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-faint); }
+
+  h1.title { font-size: clamp(28px, 4.4vw, 40px); font-weight: 800; line-height: 1.14; margin-bottom: 18px; }
+  .dek { font-size: 19px; color: var(--ink-soft); max-width: 56ch; margin-bottom: 30px; }
+
+  .linkedin-callout {
+    display: flex; align-items: center; gap: 12px; margin: 0 0 40px;
+    padding: 14px 18px; background: var(--paper-raised); border: 1px solid var(--line); border-radius: 12px;
+    font-size: 14px; color: var(--ink-soft);
+  }
+  .linkedin-callout a { font-weight: 700; }
+
+  .prose p { margin: 0 0 20px; color: var(--ink-soft); }
+  .prose h2 { font-size: 22px; font-weight: 800; color: var(--ink); margin: 48px 0 16px; }
+  .prose h2:first-child { margin-top: 0; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.86em; background: var(--paper-raised); border: 1px solid var(--line); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+
+  blockquote.cause {
+    margin: 28px 0; padding: 18px 22px; border-left: 3px solid var(--accent-2);
+    background: var(--accent-2-soft); border-radius: 0 12px 12px 0;
+  }
+  blockquote.cause .lbl { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-2); display: block; margin-bottom: 6px; }
+  blockquote.cause p { color: var(--ink); margin: 0; font-size: 15.5px; }
+
+  .practice-list { display: flex; flex-direction: column; gap: 0; margin: 8px 0 20px; }
+  .practice {
+    display: grid; grid-template-columns: 34px 1fr; gap: 16px;
+    padding: 18px 0; border-top: 1px solid var(--line);
+  }
+  .practice:first-child { border-top: none; padding-top: 0; }
+  .practice .n {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px;
+  }
+  .practice h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; }
+  .practice p { color: var(--ink-soft); font-size: 14.5px; margin: 0; line-height: 1.6; }
+
+  footer.post-footer { border-top: 1px solid var(--line); margin-top: 50px; padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: var(--ink-faint); font-size: 13px; }
+  footer.post-footer a { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="header-row">
+    <a class="back-link" href="../index.html#writing">← Back to aniket-dg.github.io</a>
+    <div class="header-actions">
+      <a class="icon-link" href="https://linkedin.com/in/aniket-dg" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+      <button class="theme-btn" id="theme-toggle" type="button">Toggle theme</button>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="kicker">Write-up</div>
+  <div class="meta-row"><span>September 2026</span><span class="dot"></span><span>Observability</span><span class="dot"></span><span>5 min read</span></div>
+  <h1 class="title">Our Sentry bill was quietly tracing things nobody would ever debug</h1>
+  <p class="dek">Sentry makes it trivial to trace everything — every request, job, query, re-render. That's exactly the problem: the parts of the bill that grew fastest were the ones nobody was ever going to look at.</p>
+
+  <div class="linkedin-callout">
+    <span>Originally posted on</span>
+    <a href="https://lnkd.in/p/d_i73JRx" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+  </div>
+
+  <div class="prose">
+    <h2>The problem</h2>
+    <p>Sentry billing crept up until it was a real line item, and the instinct was to assume it was tracking something important — more traffic, more errors, more users. It wasn't. The biggest contributors to Performance Units were <strong>infrastructure talking to itself</strong>: health checks, job-scheduler heartbeats, and metrics-scraping routes, all faithfully traced end to end, all producing close to zero errors, none of them anything a human was ever going to open.</p>
+
+    <blockquote class="cause">
+      <span class="lbl">The actual problem</span>
+      <p>Sentry makes it trivial to trace everything — every request, job, query, re-render. Easy to add isn't the same as worth paying for. Nobody had been selective about what actually warranted monitoring, so by default, everything got it.</p>
+    </blockquote>
+
+    <h2>Six practices that brought it back under control</h2>
+    <div class="practice-list">
+      <div class="practice">
+        <div class="n">1</div>
+        <div>
+          <h3>Log level discipline</h3>
+          <p>A caught exception that was handled correctly isn't an incident — log it at <code>warning</code> or <code>info</code>, not <code>error</code>. Every <code>error</code>-level log opens a full Sentry Issue, tracked and counted, whether or not anyone will ever act on it.</p>
+        </div>
+      </div>
+      <div class="practice">
+        <div class="n">2</div>
+        <div>
+          <h3>Never log inside a loop</h3>
+          <p>One failure inside a loop can turn into hundreds of identical events. Log a summary before and after the operation instead of once per iteration.</p>
+        </div>
+      </div>
+      <div class="practice">
+        <div class="n">3</div>
+        <div>
+          <h3>Exclude exceptions you expect</h3>
+          <p>If an exception is a known, handled case, add it to <code>ignore_errors</code> or catch it specifically — don't let Sentry re-discover the same "known issue" every day.</p>
+        </div>
+      </div>
+      <div class="practice">
+        <div class="n">4</div>
+        <div>
+          <h3>Gate new services before they ship</h3>
+          <p>Decide on tracing intentionally, before merge, via <code>traces_sampler</code> — not by leaving the default on and revisiting it after the bill shows up.</p>
+        </div>
+      </div>
+      <div class="practice">
+        <div class="n">5</div>
+        <div>
+          <h3>Fix the N+1s, not just the alert</h3>
+          <p>Every database call generates its own span. An N+1 query doesn't just slow down the request — it multiplies the tracing overhead billed for that single request.</p>
+        </div>
+      </div>
+      <div class="practice">
+        <div class="n">6</div>
+        <div>
+          <h3>Report retries strategically</h3>
+          <p>Report an error once the retries are exhausted, not on every intermediate attempt. A request that eventually succeeds after two retries isn't three separate incidents.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>What changed</h2>
+    <p>The mental shift mattered more than any single fix: monitor <strong>what could plausibly need debugging</strong>, not everything that's technically traceable. Error capture and performance tracing are two different decisions, and treating log-level choice as a real code-review concern — not an afterthought — is what keeps both of them honest going forward.</p>
+  </div>
+
+  <footer class="post-footer">
+    <span>Written by Aniket Gavali · <a href="https://linkedin.com/in/aniket-dg" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
+    <a href="../index.html#writing">← Back to the portfolio</a>
+  </footer>
+</article>
+
+<script>
+  (function () {
+    var toggle = document.getElementById('theme-toggle');
+    var root = document.documentElement;
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+    } catch (e) {}
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme');
+        var next = current === 'dark' ? 'light' : (current === 'light' ? null : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+        if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
+        try { localStorage.setItem('theme', next || ''); } catch (e) {}
+      });
+    }
+  })();
+</script>
+</body>
+</html>
