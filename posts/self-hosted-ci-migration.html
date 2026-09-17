@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" id="theme-color-meta" content="#FBF6EF" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <title>Migrating CI to Self-Hosted Runners | Aniket Gavali</title>
 <meta name="description" content="Case study: migrating a GitHub Actions CI matrix to self-hosted AWS EC2 runners, cutting cost by ~70% and doubling test speed." />
 <meta name="author" content="Aniket Gavali" />
@@ -58,7 +61,7 @@
     border-bottom: 1px solid var(--line);
     padding: 14px 24px;
   }
-  .header-row { max-width: 780px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .header-row { max-width: 780px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; }
   .back-link { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; text-decoration: none; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 8px; }
   .back-link:hover { color: var(--accent); }
   .header-actions { display: flex; align-items: center; gap: 10px; }
@@ -147,6 +150,7 @@
   <div class="header-row">
     <a class="back-link" href="../index.html#writing">← Back to aniket-dg.github.io</a>
     <div class="header-actions">
+      <button class="theme-btn" id="share-btn" type="button">Copy link</button>
       <a class="icon-link" href="https://linkedin.com/in/aniket-dg" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
       <button class="theme-btn" id="theme-toggle" type="button">Toggle theme</button>
     </div>
@@ -266,16 +270,51 @@ image_id = <span class="g">"resolve:ssm:/ci/runner-ami-id"</span>
   (function () {
     var toggle = document.getElementById('theme-toggle');
     var root = document.documentElement;
+
+    function syncThemeColor() {
+      var meta = document.getElementById('theme-color-meta');
+      if (!meta) return;
+      var explicit = root.getAttribute('data-theme');
+      var isDark = explicit ? explicit === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      meta.setAttribute('content', isDark ? '#1C1815' : '#FBF6EF');
+    }
+
     try {
       var saved = localStorage.getItem('theme');
       if (saved) root.setAttribute('data-theme', saved);
     } catch (e) {}
+    syncThemeColor();
+
     if (toggle) {
       toggle.addEventListener('click', function () {
         var current = root.getAttribute('data-theme');
         var next = current === 'dark' ? 'light' : (current === 'light' ? null : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
         if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
         try { localStorage.setItem('theme', next || ''); } catch (e) {}
+        syncThemeColor();
+      });
+    }
+
+    var shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        var url = window.location.href;
+        var done = function () {
+          var original = shareBtn.textContent;
+          shareBtn.textContent = 'Copied!';
+          setTimeout(function () { shareBtn.textContent = original; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done, done);
+        } else {
+          var input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(input);
+          done();
+        }
       });
     }
   })();

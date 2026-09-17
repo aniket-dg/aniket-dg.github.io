@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" id="theme-color-meta" content="#FBF6EF" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <title>Aniket Gavali | Backend Developer</title>
 <meta name="description" content="Portfolio of Aniket Gavali — backend developer specializing in systems integrations, async infrastructure, and production reliability with Python, Django, and AWS." />
 <meta name="author" content="Aniket Gavali" />
@@ -493,16 +496,28 @@
   (function () {
     var toggle = document.getElementById('theme-toggle');
     var root = document.documentElement;
+
+    function syncThemeColor() {
+      var meta = document.getElementById('theme-color-meta');
+      if (!meta) return;
+      var explicit = root.getAttribute('data-theme');
+      var isDark = explicit ? explicit === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      meta.setAttribute('content', isDark ? '#1C1815' : '#FBF6EF');
+    }
+
     try {
       var saved = localStorage.getItem('theme');
       if (saved) root.setAttribute('data-theme', saved);
     } catch (e) {}
+    syncThemeColor();
+
     if (toggle) {
       toggle.addEventListener('click', function () {
         var current = root.getAttribute('data-theme');
         var next = current === 'dark' ? 'light' : (current === 'light' ? null : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
         if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
         try { localStorage.setItem('theme', next || ''); } catch (e) {}
+        syncThemeColor();
       });
     }
   })();
