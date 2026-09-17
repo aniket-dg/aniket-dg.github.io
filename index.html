@@ -1,25 +1,478 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aniket Gavali | Software Engineer</title>
-    <meta name="description" content="Portfolio of Aniket Gavali - Backend Developer specializing in Python, Django, AWS and more" />
-    <meta name="author" content="Aniket Gavali" />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aniket Gavali | Backend Developer</title>
+<meta name="description" content="Portfolio of Aniket Gavali — backend developer specializing in systems integrations, async infrastructure, and production reliability with Python, Django, and AWS." />
+<meta name="author" content="Aniket Gavali" />
+<meta property="og:title" content="Aniket Gavali | Backend Developer" />
+<meta property="og:description" content="Backend developer specializing in systems integrations, async infrastructure, and production reliability." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Karla:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FBF6EF;
+    --paper-raised: #FFFDF8;
+    --ink: #2B2620;
+    --ink-soft: #6B6357;
+    --ink-faint: #9B9284;
+    --line: #EDE2D0;
+    --line-strong: #DFCFAF;
+    --accent: #2F7B6B;
+    --accent-soft: #E4F1EC;
+    --accent-2: #E8A33D;
+    --accent-2-soft: #FBEDD3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1C1815;
+      --paper-raised: #242019;
+      --ink: #F3EDE3;
+      --ink-soft: #C9BFAE;
+      --ink-faint: #8B8172;
+      --line: #3A332A;
+      --line-strong: #4A4133;
+      --accent: #5FBBA4;
+      --accent-soft: #1E3831;
+      --accent-2: #F0B85C;
+      --accent-2-soft: #3A2A12;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1C1815;
+    --paper-raised: #242019;
+    --ink: #F3EDE3;
+    --ink-soft: #C9BFAE;
+    --ink-faint: #8B8172;
+    --line: #3A332A;
+    --line-strong: #4A4133;
+    --accent: #5FBBA4;
+    --accent-soft: #1E3831;
+    --accent-2: #F0B85C;
+    --accent-2-soft: #3A2A12;
+  }
 
-    <meta property="og:title" content="Aniket Gavali | Software Engineer" />
-    <meta property="og:description" content="Backend Developer specializing in Python, Django, AWS and more" />
-    <meta property="og:type" content="website" />
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Karla', system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
 
-    <meta name="twitter:card" content="summary_large_image" />
+  .wrap { max-width: 920px; margin: 0 auto; padding-inline: 24px; }
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <script type="module" crossorigin src="/assets/index-CYQd12Cb.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-t2YsE5Pj.css">
-  </head>
+  /* ---------- Nav ---------- */
+  header.site {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; text-decoration: none; }
+  .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-2); flex: none; }
+  nav.links { display: flex; gap: 26px; align-items: center; }
+  nav.links a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--ink-soft); }
+  nav.links a:hover { color: var(--accent); }
+  .theme-btn {
+    font-family: 'Karla', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-soft);
+    background: var(--paper-raised); border: 1px solid var(--line); border-radius: 20px;
+    padding: 7px 14px; cursor: pointer;
+  }
+  .theme-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 700px) { nav.links a:not(.resume-link) { display: none; } }
 
-  <body>
-    <div id="root"></div>
-  </body>
+  /* ---------- Hero ---------- */
+  .hero { padding: 68px 0 40px; }
+  .hero-row { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+  .blob {
+    width: 128px; height: 128px; flex: none;
+    background: linear-gradient(155deg, var(--accent-2), var(--accent));
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; color: var(--paper-raised);
+  }
+  .hero h1 { font-weight: 800; font-size: clamp(30px, 4.2vw, 44px); line-height: 1.12; margin-bottom: 14px; max-width: 15ch; }
+  .hero .sub { font-size: 17.5px; color: var(--ink-soft); max-width: 50ch; line-height: 1.65; }
+  .hero .sub strong { color: var(--accent); font-weight: 600; }
+  .wavy { width: 100%; height: 14px; display: block; margin: 0 0 8px; }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+  .btn { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14.5px; padding: 12px 22px; border-radius: 28px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .btn.solid { background: var(--accent); color: var(--paper-raised); }
+  .btn.solid:hover { background: color-mix(in srgb, var(--accent) 85%, black); }
+  .btn.outline { border: 1.5px solid var(--line-strong); color: var(--ink); }
+  .btn.outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- Section shell ---------- */
+  section { padding: 60px 0; }
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .kicker .num { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 2px 8px; font-size: 11.5px; }
+  h2.h { font-size: clamp(23px, 2.6vw, 29px); font-weight: 800; margin-bottom: 10px; max-width: 20ch; }
+  .section-sub { color: var(--ink-faint); font-size: 15px; max-width: 56ch; margin: 0 0 32px; }
+  .prose { max-width: 62ch; color: var(--ink-soft); }
+  .prose p { margin: 0 0 14px; }
+  .prose p:last-child { margin: 0; }
+
+  /* ---------- Cards (shared) ---------- */
+  .card {
+    background: var(--paper-raised);
+    border: 1.5px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+  }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .job {
+    display: grid; grid-template-columns: 22px 1fr; gap: 20px;
+    position: relative;
+  }
+  .job-rail { display: flex; flex-direction: column; align-items: center; }
+  .job-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex: none; box-shadow: 0 0 0 4px var(--accent-soft); }
+  .job-line { flex: 1; width: 2px; background: var(--line); margin-top: 4px; }
+  .job:last-child .job-line { display: none; }
+  .job-body { padding-bottom: 40px; }
+  .job-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 2px; }
+  .job h3 { font-size: 18px; font-weight: 800; }
+  .job .period { font-size: 13px; color: var(--ink-faint); font-weight: 600; white-space: nowrap; }
+  .job .company { color: var(--accent); font-weight: 700; font-size: 14px; display: block; margin-bottom: 4px; }
+  .job .loc { color: var(--ink-faint); font-size: 13px; margin-bottom: 12px; }
+  .job ul { margin: 0 0 14px; padding-left: 20px; color: var(--ink-soft); font-size: 15px; }
+  .job li { margin-bottom: 7px; }
+  .job li:last-child { margin-bottom: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11.5px; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 12px; padding: 4px 10px; }
+
+  /* ---------- Highlights ---------- */
+  .hl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .hl-grid { grid-template-columns: 1fr; } }
+  .hl-card .num { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent-2); display: block; margin-bottom: 12px; }
+  .hl-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .hl-card p { color: var(--ink-soft); font-size: 14px; margin: 0; line-height: 1.6; }
+
+  /* ---------- Writing ---------- */
+  .post-list { display: flex; flex-direction: column; }
+  .post-row {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    padding: 26px 0; border-top: 1px solid var(--line); text-decoration: none; color: inherit;
+  }
+  .post-row:first-child { border-top: none; padding-top: 0; }
+  .post-row:hover .post-title { color: var(--accent); }
+  .post-main { max-width: 60ch; }
+  .post-meta { display: flex; gap: 10px; align-items: center; color: var(--ink-faint); font-size: 12.5px; font-weight: 600; margin-bottom: 8px; }
+  .post-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-faint); }
+  .post-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; transition: color 0.15s ease; }
+  .post-dek { color: var(--ink-soft); font-size: 14.5px; margin: 0; }
+  .post-arrow { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); flex: none; white-space: nowrap; margin-top: 4px; }
+
+  /* ---------- Projects ---------- */
+  .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; } }
+  .proj h3 { font-size: 16px; margin-bottom: 4px; }
+  .proj .period { color: var(--ink-faint); font-size: 12px; font-weight: 600; display: block; margin-bottom: 12px; }
+  .proj p { color: var(--ink-soft); font-size: 14px; margin: 0 0 14px; line-height: 1.6; }
+  .proj-link { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--accent); text-decoration: none; }
+  .proj-link:hover { text-decoration: underline; }
+  .proj .tags { margin-bottom: 14px; }
+
+  /* ---------- Skills ---------- */
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 32px; }
+  @media (max-width: 700px) { .skills-grid { grid-template-columns: 1fr; } }
+  .skill-group h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700; margin-bottom: 10px; }
+  .skill-group .tags .tag { color: var(--ink-soft); background: var(--paper-raised); border: 1px solid var(--line); }
+
+  /* ---------- Education ---------- */
+  .edu-row { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .edu-row:first-child { border-top: none; padding-top: 0; }
+  .edu-row h3 { font-size: 15.5px; margin-bottom: 3px; }
+  .edu-row .school { color: var(--ink-soft); font-size: 13.5px; }
+  .edu-row .period { color: var(--ink-faint); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .achievement { display: flex; gap: 10px; align-items: baseline; color: var(--ink-soft); font-size: 14.5px; margin-top: 18px; }
+  .achievement .ico { color: var(--accent-2); flex: none; }
+
+  /* ---------- Contact ---------- */
+  .contact-card {
+    background: linear-gradient(155deg, var(--accent-soft), var(--paper-raised));
+    border: 1.5px solid var(--line);
+    border-radius: 24px;
+    padding: 46px 40px;
+    text-align: left;
+  }
+  .contact-card h2 { font-size: clamp(24px, 3.2vw, 34px); font-weight: 800; margin-bottom: 16px; max-width: 18ch; }
+  .contact-card .sub { color: var(--ink-soft); font-size: 15.5px; max-width: 52ch; margin-bottom: 26px; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  footer.site {
+    padding: 30px 0 50px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    color: var(--ink-faint); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav-row">
+    <a class="brand" href="#top"><span class="dot"></span>Aniket Gavali</a>
+    <nav class="links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#highlights">Highlights</a>
+      <a href="#writing">Writing</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="theme-toggle" type="button">Toggle theme</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <div class="hero-row">
+      <div class="blob">AG</div>
+      <div>
+        <h1>Hi, I'm Aniket.</h1>
+        <p class="sub">I'm a backend developer who builds the plumbing that lets one company's systems <strong>actually talk to another's</strong> — HRIS records, ATS candidates, employee data, all the messy real-world stuff that doesn't fit a clean schema on the first try.</p>
+        <div class="cta-row">
+          <a class="btn solid" href="#projects">See what I've built</a>
+          <a class="btn outline" href="#contact">Say hello</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="wavy wrap" viewBox="0 0 400 14" preserveAspectRatio="none"><path d="M0 7 Q 20 0 40 7 T 80 7 T 120 7 T 160 7 T 200 7 T 240 7 T 280 7 T 320 7 T 360 7 T 400 7" fill="none" stroke="var(--accent-2)" stroke-width="2"/></svg>
+
+  <section id="about" class="wrap">
+    <div class="kicker">About</div>
+    <div class="prose">
+      <p>My journey started during a diploma project where I discovered that most bugs aren't really bugs — they're two systems disagreeing about what a "record" is. I've been sorting out that disagreement professionally ever since.</p>
+      <p>Today that means building HRIS and ATS integrations at <strong style="color:var(--ink)">Journeyfront Inc</strong> — webhook contracts, async pipelines, and the field-mapping logic that lets a dozen vendors describe the same employee in a dozen different ways. I spend a fair share of my time on the infrastructure around the code too: CI runners, migrations, and enough hours in Sentry to have strong opinions about which errors deserve a page at 2am.</p>
+      <p>Outside of work I build smaller things end-to-end, from an investment tracker to a real-time collaborative code editor — mostly because I like seeing an idea go from a blank repo to something a friend actually uses.</p>
+    </div>
+  </section>
+
+  <section id="experience" class="wrap">
+    <div class="kicker">Experience</div>
+    <h2 class="h">Where I've worked</h2>
+    <p class="section-sub">Three roles, each one more about making systems cooperate than about writing net-new code.</p>
+
+    <div class="timeline">
+      <div class="job">
+        <div class="job-rail"><div class="job-dot"></div><div class="job-line"></div></div>
+        <div class="job-body">
+          <div class="job-top"><h3>Senior Backend Developer</h3><span class="period">Aug 2025 — present</span></div>
+          <span class="company">Journeyfront Inc</span>
+          <span class="loc">Remote</span>
+          <ul>
+            <li>Build and maintain HRIS/ATS integrations (Kombo, Workday, Everise, Joynd, Tavio, KeHE, PageUp) for automated employee sync — webhook-driven triggers, cross-vendor field normalization, and staffing-entity/job-req mapping.</li>
+            <li>Design async task pipelines using Celery and SQS for scalable, decoupled background processing across integrations.</li>
+            <li>Built a vendor-agnostic automated employee-data export pipeline (SFTP-delivered flat files) with config-driven, per-client column mapping.</li>
+            <li>Design and document public REST API endpoints (OpenAPI) used by external ATS/HRIS integration partners.</li>
+            <li>Improve production reliability by triaging and fixing recurring errors surfaced in Sentry, tuning logging levels, and cutting APM tracing overhead.</li>
+            <li>Re-architected CI infrastructure onto self-hosted runners, cutting compute cost and per-job test time significantly.</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">PostgreSQL</span>
+            <span class="tag">Celery</span><span class="tag">AWS SQS</span><span class="tag">Redis</span>
+            <span class="tag">Kombo API</span><span class="tag">Vue.js</span><span class="tag">Docker</span>
+            <span class="tag">Terraform</span><span class="tag">Sentry</span><span class="tag">GitHub Actions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-rail"><div class="job-dot" style="background:var(--accent-2); box-shadow:0 0 0 4px var(--accent-2-soft);"></div><div class="job-line"></div></div>
+        <div class="job-body">
+          <div class="job-top"><h3>Application Developer</h3><span class="period">Sep 2022 — Aug 2025</span></div>
+          <span class="company">Noovosoft Technologies</span>
+          <span class="loc">Pune, MH</span>
+          <ul>
+            <li>Implemented an AWS Lambda function using Terraform and a NAT Gateway to work around IP restrictions, replacing legacy data connectors with a scalable architecture.</li>
+            <li>Engineered an automated feed-management system integrating TapFeed data, cutting manual effort by 80%.</li>
+            <li>Configured pre-push Git hooks to automate test runs and enforce formatting with Black, cutting bugs and style inconsistencies by 95%.</li>
+            <li>Mentored incoming interns on engineering practices, improving code quality, test coverage, and delivery timelines.</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">PostgreSQL</span>
+            <span class="tag">Celery</span><span class="tag">AWS</span><span class="tag">Terraform</span><span class="tag">CI/CD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-rail"><div class="job-dot" style="background:var(--ink-faint); box-shadow:0 0 0 4px var(--line);"></div></div>
+        <div class="job-body">
+          <div class="job-top"><h3>Backend Developer (Intern)</h3><span class="period">Apr 2021 — Aug 2022</span></div>
+          <span class="company">Siteguide Pvt. Ltd.</span>
+          <span class="loc">Jalgaon, MH</span>
+          <ul>
+            <li>Optimized application performance, cutting load time by 70% through query and code-level improvements.</li>
+            <li>Built reusable modules that accelerated delivery across roughly 20% of other projects.</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">MySQL</span><span class="tag">REST APIs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="highlights" class="wrap">
+    <div class="kicker">Highlights</div>
+    <h2 class="h">The work that keeps things standing up</h2>
+    <p class="section-sub">Not features — the reliability and infrastructure work behind them.</p>
+    <div class="hl-grid">
+      <div class="card hl-card">
+        <span class="num">~70%</span>
+        <h3>Self-hosted CI migration</h3>
+        <p>Moved a GitHub Actions test matrix onto ephemeral, self-hosted EC2 runners from a pre-baked golden AMI — cutting cost and per-job time by more than half, after tracking down a hidden bug replaying hundreds of DB migrations on every run.</p>
+      </div>
+      <div class="card hl-card">
+        <span class="num">Sentry</span>
+        <h3>Production debugging</h3>
+        <p>Built a repeatable root-cause workflow for production errors instead of patching symptoms — closing recurring exception clusters and quieting noisy alerts so Sentry stays a real signal.</p>
+      </div>
+      <div class="card hl-card">
+        <span class="num">N+1</span>
+        <h3>Query prevention</h3>
+        <p>Folded query-cost review into everyday code review, catching N+1 risk in hot paths and fixing it with select_related/prefetch_related before it ever reaches production.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing" class="wrap">
+    <div class="kicker">Writing</div>
+    <h2 class="h">Write-ups from the job</h2>
+    <p class="section-sub">Longer write-ups on the infrastructure and reliability work — what broke, why, and what fixed it.</p>
+    <div class="post-list">
+      <a class="post-row" href="posts/self-hosted-ci-migration.html">
+        <div class="post-main">
+          <div class="post-meta"><span>Sep 2026</span><span class="dot"></span><span>Infrastructure</span><span class="dot"></span><span>7 min read</span></div>
+          <div class="post-title">Migrating our CI from GitHub-hosted to self-hosted AWS workers</div>
+          <p class="post-dek">Cutting CI cost by ~70% and per-leg time by more than half — and the migration-replay bug that was quietly eating both.</p>
+        </div>
+        <span class="post-arrow">Read write-up →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="projects" class="wrap">
+    <div class="kicker">Projects</div>
+    <h2 class="h">Things I've built on the side</h2>
+    <p class="section-sub">Smaller in scope, but end-to-end mine.</p>
+    <div class="proj-grid">
+      <div class="card proj">
+        <h3>FinSailor</h3>
+        <span class="period">Apr 2024 — present</span>
+        <p>A full-stack investment-tracking app across brokers (Zerodha, Groww), with portfolio health analysis, mutual-fund tracking, and real-time market data via Celery-driven async tasks.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Django</span><span class="tag">Celery</span><span class="tag">PostgreSQL</span><span class="tag">React</span></div>
+        <a class="proj-link" href="https://github.com/aniket-dg/finsailor" target="_blank" rel="noopener noreferrer">View source →</a>
+      </div>
+      <div class="card proj">
+        <h3>CollaborativePY</h3>
+        <span class="period">Nov 2022 — Mar 2023</span>
+        <p>A web-based collaborative IDE for real-time pair programming — synchronous editing plus text/video chat over WebRTC, for remote debugging sessions that don't feel asynchronous.</p>
+        <div class="tags"><span class="tag">Django</span><span class="tag">WebSockets</span><span class="tag">WebRTC</span><span class="tag">Node.js</span></div>
+        <a class="proj-link" href="https://github.com/aniket-dg/collaborativePy.git" target="_blank" rel="noopener noreferrer">View source →</a>
+      </div>
+      <div class="card proj">
+        <h3>MahaSIG Portal</h3>
+        <span class="period">Jan 2022 — Mar 2022</span>
+        <p>A full-stack Student-Industry-Government portal with P2P/group chat, OTP verification, and automated feedback emails, plus spreadsheet/PDF reporting.</p>
+        <div class="tags"><span class="tag">Django</span><span class="tag">Channels</span><span class="tag">Redis</span></div>
+        <a class="proj-link" href="https://github.com/aniket-dg/mahasig.git" target="_blank" rel="noopener noreferrer">View source →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="wrap">
+    <div class="kicker">Skills</div>
+    <h2 class="h">What I reach for</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="tags"><span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Java</span><span class="tag">PHP</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Frameworks</h3>
+        <div class="tags"><span class="tag">Django</span><span class="tag">Flask</span><span class="tag">Celery</span><span class="tag">Vue.js</span><span class="tag">React</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Data &amp; infra</h3>
+        <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">Redis</span><span class="tag">AWS</span><span class="tag">AWS SQS</span><span class="tag">Terraform</span><span class="tag">Docker</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Tooling</h3>
+        <div class="tags"><span class="tag">Git</span><span class="tag">Sentry</span><span class="tag">GitHub Actions</span><span class="tag">Nginx</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px; padding-top:32px; border-top:1px solid var(--line);">
+      <div class="kicker" style="margin-bottom:18px;">Education</div>
+      <div class="edu-row">
+        <div><h3>Bachelor of Engineering, Information Technology</h3><span class="school">Sinhgad Institute of Technology and Science · CGPA 9.64</span></div>
+        <span class="period">Jun 2020 — May 2023</span>
+      </div>
+      <div class="edu-row">
+        <div><h3>Diploma in Computer Technology</h3><span class="school">Government Polytechnic Nashik · 88.00%</span></div>
+        <span class="period">Aug 2017 — May 2020</span>
+      </div>
+      <div class="achievement"><span class="ico">★</span> Winner — Mindquisitive Hackathon, among 75+ groups</div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap">
+    <div class="contact-card">
+      <div class="kicker">Contact</div>
+      <h2>Got an integration that keeps breaking at 2am? Let's fix it properly.</h2>
+      <p class="sub">I'm always up for talking through a tricky backend problem, or just saying hi.</p>
+      <div class="contact-links">
+        <a class="btn solid" href="mailto:aniket.dg25@gmail.com">Email me</a>
+        <a class="btn outline" href="https://github.com/aniket-dg" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="btn outline" href="https://linkedin.com/in/aniket-dg" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn outline" href="/aniket_gavali_resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site wrap">
+    <span>© 2026 Aniket Gavali</span>
+    <span>Built with Django on the brain.</span>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var toggle = document.getElementById('theme-toggle');
+    var root = document.documentElement;
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+    } catch (e) {}
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme');
+        var next = current === 'dark' ? 'light' : (current === 'light' ? null : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+        if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
+        try { localStorage.setItem('theme', next || ''); } catch (e) {}
+      });
+    }
+  })();
+</script>
+</body>
 </html>

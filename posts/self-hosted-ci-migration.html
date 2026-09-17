@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Migrating CI to Self-Hosted Runners | Aniket Gavali</title>
+<meta name="description" content="Case study: migrating a GitHub Actions CI matrix to self-hosted AWS EC2 runners, cutting cost by ~70% and doubling test speed." />
+<meta name="author" content="Aniket Gavali" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Karla:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper: #FBF6EF;
+    --paper-raised: #FFFDF8;
+    --ink: #2B2620;
+    --ink-soft: #6B6357;
+    --ink-faint: #9B9284;
+    --line: #EDE2D0;
+    --line-strong: #DFCFAF;
+    --accent: #2F7B6B;
+    --accent-soft: #E4F1EC;
+    --accent-2: #E8A33D;
+    --accent-2-soft: #FBEDD3;
+    --bad: #C15A3E;
+    --bad-soft: #F8E7E1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1C1815; --paper-raised: #242019; --ink: #F3EDE3; --ink-soft: #C9BFAE;
+      --ink-faint: #8B8172; --line: #3A332A; --line-strong: #4A4133;
+      --accent: #5FBBA4; --accent-soft: #1E3831; --accent-2: #F0B85C; --accent-2-soft: #3A2A12;
+      --bad: #E08064; --bad-soft: #3A2119;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1C1815; --paper-raised: #242019; --ink: #F3EDE3; --ink-soft: #C9BFAE;
+    --ink-faint: #8B8172; --line: #3A332A; --line-strong: #4A4133;
+    --accent: #5FBBA4; --accent-soft: #1E3831; --accent-2: #F0B85C; --accent-2-soft: #3A2A12;
+    --bad: #E08064; --bad-soft: #3A2119;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Karla', system-ui, sans-serif; font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+
+  header.site {
+    border-bottom: 1px solid var(--line);
+    padding: 18px 24px;
+  }
+  .back-link { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; text-decoration: none; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 8px; max-width: 780px; margin: 0 auto; }
+  .back-link:hover { color: var(--accent); }
+
+  article { max-width: 700px; margin: 0 auto; padding: 56px 24px 100px; }
+
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .meta-row { display: flex; gap: 14px; align-items: center; color: var(--ink-faint); font-size: 13.5px; margin-bottom: 30px; }
+  .meta-row .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-faint); }
+
+  h1.title { font-size: clamp(28px, 4.4vw, 40px); font-weight: 800; line-height: 1.14; margin-bottom: 18px; }
+  .dek { font-size: 19px; color: var(--ink-soft); max-width: 56ch; margin-bottom: 44px; }
+
+  .prose p { margin: 0 0 20px; color: var(--ink-soft); }
+  .prose h2 { font-size: 22px; font-weight: 800; color: var(--ink); margin: 48px 0 16px; }
+  .prose h2:first-child { margin-top: 0; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.86em; background: var(--paper-raised); border: 1px solid var(--line); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  .prose ul { color: var(--ink-soft); padding-left: 22px; margin: 0 0 20px; }
+  .prose li { margin-bottom: 8px; }
+
+  .compare {
+    display: flex; gap: 0; margin: 28px 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
+  }
+  .compare > div { flex: 1; padding: 20px 22px; }
+  .compare .before { background: var(--bad-soft); }
+  .compare .after { background: var(--accent-soft); }
+  .compare .lbl { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .compare .before .lbl { color: var(--bad); }
+  .compare .after .lbl { color: var(--accent); }
+  .compare .big { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 26px; display: block; margin-bottom: 4px; }
+  .compare .note { font-size: 13px; color: var(--ink-faint); }
+  @media (max-width: 560px) { .compare { flex-direction: column; } }
+
+  blockquote.cause {
+    margin: 28px 0; padding: 18px 22px; border-left: 3px solid var(--accent-2);
+    background: var(--accent-2-soft); border-radius: 0 12px 12px 0;
+  }
+  blockquote.cause .lbl { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-2); display: block; margin-bottom: 6px; }
+  blockquote.cause p { color: var(--ink); margin: 0; font-size: 15.5px; }
+
+  .stat-strip { display: flex; gap: 24px; flex-wrap: wrap; margin: 12px 0 40px; padding: 22px 24px; background: var(--paper-raised); border: 1px solid var(--line); border-radius: 16px; }
+  .stat-strip .stat { flex: 1; min-width: 130px; }
+  .stat-strip b { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; color: var(--accent); display: block; }
+  .stat-strip span { color: var(--ink-faint); font-size: 12.5px; }
+
+  .term {
+    background: #1C1815; color: #E9E3D6; border-radius: 12px; padding: 18px 20px; margin: 24px 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.65; overflow-x: auto;
+  }
+  .term .c { color: #8A8172; }
+  .term .g { color: #7FCBAA; }
+  .term .r { color: #E08064; }
+
+  footer.post-footer { border-top: 1px solid var(--line); margin-top: 50px; padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: var(--ink-faint); font-size: 13px; }
+  footer.post-footer a { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a class="back-link" href="../index.html#writing">← Back to aniket-dg.github.io</a>
+</header>
+
+<article>
+  <div class="kicker">Write-up</div>
+  <div class="meta-row"><span>September 2026</span><span class="dot"></span><span>Infrastructure</span><span class="dot"></span><span>7 min read</span></div>
+  <h1 class="title">Migrating our CI from GitHub-hosted to self-hosted AWS workers</h1>
+  <p class="dek">How we moved a 13-leg functional-test matrix off GitHub-hosted runners, cut its cost by roughly 70%, halved per-leg time — and found the real reason every job was silently redoing 777 database migrations.</p>
+
+  <div class="stat-strip">
+    <div class="stat"><b>~70%</b><span>lower CI compute cost</span></div>
+    <div class="stat"><b>2x+</b><span>faster per-leg test time</span></div>
+    <div class="stat"><b>0</b><span>Lambda throttles under load</span></div>
+  </div>
+
+  <div class="prose">
+    <h2>The problem</h2>
+    <p>Every PR run on our main Django backend was burning roughly <strong>87 billable minutes</strong> on GitHub-hosted <code>ubuntu-latest</code> runners, at about 18.5 runs a day. At GitHub's per-minute Linux rate, that worked out to around <strong>$289 a month</strong> — and 93–96% of that was one thing: the functional-test matrix. Ten to twenty parallel legs, each paying the same fixed cost — checkout, Python setup, poetry install, a MySQL container built from scratch — before a single test actually ran.</p>
+    <p>Speed had the same shape as cost. Most of a leg's wall-clock time wasn't spent testing anything at all.</p>
+
+    <div class="compare">
+      <div class="before">
+        <span class="lbl">Before — every month</span>
+        <span class="big">~$289</span>
+        <span class="note">555 runs × 87 billed min × $0.006/min, 100% GitHub Actions</span>
+      </div>
+      <div class="after">
+        <span class="lbl">After — every month</span>
+        <span class="big">~$87</span>
+        <span class="note">$37 GitHub Actions + $50 AWS EC2 — a ~70% reduction</span>
+      </div>
+    </div>
+
+    <h2>The approach</h2>
+    <p>Rather than trying to make the hosted runners cheaper, we moved the expensive part — the functional-test matrix — onto <strong>ephemeral EC2 runners, one instance per job</strong>. Nothing sits idle between jobs; the fleet scales to zero when there's no PR open.</p>
+    <ul>
+      <li><strong>Trigger</strong> — GitHub sends a <code>workflow_job: queued</code> webhook for every matrix leg.</li>
+      <li><strong>Scale-up</strong> — a Lambda launches one EC2 instance per job from a golden AMI. The instance registers with GitHub and claims the job.</li>
+      <li><strong>Teardown</strong> — the job finishes, the instance self-terminates, and a backstop Lambda sweeps anything orphaned.</li>
+    </ul>
+    <p>We built this on <code>github-aws-runners/terraform-aws-github-runner</code> instead of hand-rolling it — dedup, JIT registration, and backoff were already solved by a maintained module. Everything lives in an additive-only Terraform module; no existing shared infra file had to change to get here.</p>
+
+    <h2>The golden AMI</h2>
+    <p>A stock Ubuntu image isn't enough on its own — no Docker, no Python, no dependencies. Baking those in ahead of time, via Packer, is the entire reason self-hosted runners ended up <em>fast</em>, not just cheaper. Every AMI bakes in Docker plus a pre-pulled MySQL image, the GitHub Actions runner agent itself, a Python + Poetry virtualenv matching <code>poetry.lock</code> — and, the important one, a fully-migrated test database.</p>
+    <p>New AMI builds publish their ID to an SSM parameter, and every new instance resolves that parameter live at launch. No redeploy needed, and no risk of a half-built AMI reaching a real job, since the publish step only fires after Packer actually succeeds.</p>
+
+    <h2>The bug that ate all the savings</h2>
+    <p>Here's the part that took the longest to find: even with a real, fully-migrated database baked into the AMI, every single job was still replaying <strong>777 migrations from empty</strong>.</p>
+
+    <blockquote class="cause">
+      <span class="lbl">Root cause</span>
+      <p>The Packer bake's own trigger test never passed <code>--reuse-db</code>. pytest-django's default teardown dropped the test database the moment that trigger test finished — before the instance was even snapshotted. Every AMI shipped with an empty database, no matter how correct the bake script looked on paper.</p>
+    </blockquote>
+
+    <div class="compare">
+      <div class="before">
+        <span class="lbl">Before the fix</span>
+        <span class="big">620–900s</span>
+        <span class="note">777 migrations replayed, every leg, every job</span>
+      </div>
+      <div class="after">
+        <span class="lbl">After the fix</span>
+        <span class="big">3–7 migrations</span>
+        <span class="note">just the incremental gap since the last bake</span>
+      </div>
+    </div>
+
+    <p>One line fixed it — adding <code>--reuse-db</code> to the bake's own trigger run. I confirmed it live over SSM, watching a real instance's <code>django_migrations</code> row count climb during a run that was supposedly "reusing" the database, before the fix went in.</p>
+
+    <div class="term">
+<span class="c"># packer/runner-ami.pkr.hcl — the fix, in effect</span>
+image_id = <span class="g">"resolve:ssm:/ci/runner-ami-id"</span>
+
+<span class="c"># baked in, not installed at boot:</span>
+- Docker + mysql:8.4 (pre-pulled)
+- GitHub Actions runner agent
+- Python + poetry venv
+- <span class="g">/opt/mysql-premigrated-data</span> (a real, fully-migrated test DB)
+    </div>
+
+    <h2>The results</h2>
+    <p>Same 13-leg burst, before and after: every leg used to queue for its own, wildly inconsistent amount of time — one leg waited over 9 minutes for a runner. After raising reserved Lambda concurrency to 20, all 13 legs now queue for the same ~87–97 seconds, with zero Lambda throttles during the burst.</p>
+    <p>Per-leg time dropped from 620–900 seconds to 138–410 seconds — real test time, with no migration replay left to hide behind. What's left in each leg now is genuinely the tests running, which means the next place to look for more speed is the tests themselves, not the infrastructure around them.</p>
+
+    <h2>What I'd take from this</h2>
+    <p>The AMI bake looked correct by inspection — it ran, it produced an image, the image had a database file in it. It took actually watching a live instance's migration count during a run to notice the "reuse" flag wasn't doing what its name promised. The lesson wasn't really about Packer or pytest-django specifically — it was that a pipeline that <em>looks</em> idempotent and a pipeline that <em>is</em> idempotent can produce identical logs right up until someone checks the actual state.</p>
+  </div>
+
+  <footer class="post-footer">
+    <span>Written by Aniket Gavali</span>
+    <a href="../index.html#writing">← Back to the portfolio</a>
+  </footer>
+</article>
+</body>
+</html>
