@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
+import ProfessionalHighlights from "@/components/ProfessionalHighlights";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import InteractiveBackendShowcase from "@/components/InteractiveBackendShowcase";
@@ -17,6 +18,7 @@ const Index = () => {
       <InteractiveBackendShowcase />
       <About />
       <Experience />
+      <ProfessionalHighlights />
       <Projects />
       <Skills />
       <Footer />
