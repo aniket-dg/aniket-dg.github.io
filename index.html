@@ -36,7 +36,7 @@
     "https://github.com/aniket-dg",
     "https://linkedin.com/in/aniket-dg"
   ],
-  "knowsAbout": ["Python", "Django", "AWS", "Celery", "PostgreSQL", "Systems Integrations", "CI/CD"]
+  "knowsAbout": ["Python", "Django", "AWS", "Celery", "MySQL", "Systems Integrations", "CI/CD", "Observability"]
 }
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Karla:wght@400;500;600&display=swap">
@@ -336,18 +336,19 @@
           <span class="company">Journeyfront Inc</span>
           <span class="loc">Remote</span>
           <ul>
-            <li>Build and maintain HRIS/ATS integrations (Kombo, Workday, Everise, Joynd, Tavio, KeHE, PageUp) for automated employee sync — webhook-driven triggers, cross-vendor field normalization, and staffing-entity/job-req mapping.</li>
-            <li>Design async task pipelines using Celery and SQS for scalable, decoupled background processing across integrations.</li>
-            <li>Built a vendor-agnostic automated employee-data export pipeline (SFTP-delivered flat files) with config-driven, per-client column mapping.</li>
-            <li>Design and document public REST API endpoints (OpenAPI) used by external ATS/HRIS integration partners.</li>
-            <li>Improve production reliability by triaging and fixing recurring errors surfaced in Sentry, tuning logging levels, and cutting APM tracing overhead.</li>
-            <li>Re-architected CI infrastructure onto self-hosted runners, cutting compute cost and per-job test time significantly.</li>
+            <li>Build and maintain HRIS/ATS integrations across 7 vendors for automated employee sync — webhook-driven triggers, cross-vendor field normalization, and staffing-entity/job-req mapping — plus a vendor-agnostic SFTP employee-data export with per-client column mapping.</li>
+            <li>Design Celery + SQS async pipelines for decoupled background processing, public REST API endpoints (OpenAPI) for integration partners, and self-service API key management for account admins.</li>
+            <li>Re-architected CI onto ephemeral self-hosted AWS EC2 runners (Packer golden AMI, Terraform-managed autoscaling Lambda): GitHub Actions spend $457 → $135/mo (~70%), per-leg test time ~15 → 2.5–6 min, job pickup 9+ min → ~90 s. Earlier parallelized the PR test workflow from ~22 to ~9 min.</li>
+            <li>Root-caused hidden CI infrastructure bugs, including a golden AMI that silently replayed ~777 migrations on every job and an autoscaling Lambda capped at a concurrency of 1.</li>
+            <li>Built an agentic N+1 autofix pipeline: production Sentry alerts trigger a headless Claude Code agent via Slack that fixes the queryset, adds a regression test, and opens the Jira ticket and PR unattended (15+ issues handled).</li>
+            <li>Set up Claude Code engineering standards for the backend — the first repo in a company-wide rollout — including custom PR-review agents and a review-pattern database mined from ~1,000 merged PRs.</li>
+            <li>Cut Sentry tracing volume by ~60% by dropping no-value transactions with no loss of error visibility, and built outbound-request observability for integrations (per-account error rate/latency) that exposed silently dropped status updates to a client HRIS.</li>
           </ul>
           <div class="tags">
-            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">PostgreSQL</span>
-            <span class="tag">Celery</span><span class="tag">AWS SQS</span><span class="tag">Redis</span>
-            <span class="tag">Kombo API</span><span class="tag">Vue.js</span><span class="tag">Docker</span>
-            <span class="tag">Terraform</span><span class="tag">Sentry</span><span class="tag">GitHub Actions</span>
+            <span class="tag">Python</span><span class="tag">Django</span><span class="tag">MySQL</span>
+            <span class="tag">Celery</span><span class="tag">AWS</span><span class="tag">Redis</span>
+            <span class="tag">Vue.js</span><span class="tag">Docker</span><span class="tag">Terraform</span>
+            <span class="tag">Sentry</span><span class="tag">GitHub Actions</span><span class="tag">Claude Code</span>
           </div>
         </div>
       </div>
@@ -361,7 +362,7 @@
           <ul>
             <li>Implemented an AWS Lambda function using Terraform and a NAT Gateway to work around IP restrictions, replacing legacy data connectors with a scalable architecture.</li>
             <li>Engineered an automated feed-management system integrating TapFeed data, cutting manual effort by 80%.</li>
-            <li>Configured pre-push Git hooks to automate test runs and enforce formatting with Black, cutting bugs and style inconsistencies by 95%.</li>
+            <li>Configured pre-push Git hooks to run tests and enforce Black formatting before code reached review.</li>
             <li>Mentored incoming interns on engineering practices, improving code quality, test coverage, and delivery timelines.</li>
           </ul>
           <div class="tags">
@@ -379,7 +380,7 @@
           <span class="loc">Jalgaon, MH</span>
           <ul>
             <li>Optimized application performance, cutting load time by 70% through query and code-level improvements.</li>
-            <li>Built reusable modules that accelerated delivery across roughly 20% of other projects.</li>
+            <li>Built reusable modules shared across other projects.</li>
           </ul>
           <div class="tags">
             <span class="tag">Python</span><span class="tag">Django</span><span class="tag">MySQL</span><span class="tag">REST APIs</span>
@@ -397,17 +398,32 @@
       <div class="card hl-card">
         <span class="num">~70%</span>
         <h3>Self-hosted CI migration</h3>
-        <p>Moved a GitHub Actions test matrix onto ephemeral, self-hosted EC2 runners from a pre-baked golden AMI — cutting cost and per-job time by more than half, after tracking down a hidden bug replaying hundreds of DB migrations on every run.</p>
+        <p>Moved a GitHub Actions test matrix onto ephemeral, self-hosted EC2 runners from a pre-baked golden AMI — GitHub spend from $457 to ~$135 a month, per-leg test time from ~15 to 2.5–6 minutes, after tracking down a hidden bug replaying ~777 DB migrations on every run.</p>
       </div>
       <div class="card hl-card">
-        <span class="num">Sentry</span>
-        <h3>Production debugging</h3>
-        <p>Built a repeatable root-cause workflow for production errors instead of patching symptoms — closing recurring exception clusters and quieting noisy alerts so Sentry stays a real signal.</p>
+        <span class="num">22 → 9 min</span>
+        <h3>Parallelized PR checks</h3>
+        <p>Split one monolithic test job into a fast no-DB unit job plus a 4-way functional-test matrix, with dependency caching across every job — every PR gets feedback in less than half the time.</p>
       </div>
       <div class="card hl-card">
-        <span class="num">N+1</span>
-        <h3>Query prevention</h3>
-        <p>Folded query-cost review into everyday code review, catching N+1 risk in hot paths and fixing it with select_related/prefetch_related before it ever reaches production.</p>
+        <span class="num">15+</span>
+        <h3>Agentic N+1 autofix</h3>
+        <p>Production N+1 alerts from Sentry trigger a headless Claude Code agent that traces the queryset, applies the fix, writes a regression test, and opens the Jira ticket and PR — no human in the loop.</p>
+      </div>
+      <div class="card hl-card">
+        <span class="num">~1,000 PRs</span>
+        <h3>Codified review standards</h3>
+        <p>Turned the team's engineering standards into Claude Code rules, review agents, and a pattern database mined from ~1,000 merged PRs — the first repo in a company-wide rollout.</p>
+      </div>
+      <div class="card hl-card">
+        <span class="num">~60%</span>
+        <h3>Sentry cost control</h3>
+        <p>Stopped tracing transactions nobody would ever debug — heartbeats, scrape endpoints, catch-all routes — cutting ~60% of trace volume with no loss of error visibility.</p>
+      </div>
+      <div class="card hl-card">
+        <span class="num">Silent bug</span>
+        <h3>Integration observability</h3>
+        <p>Built per-account error-rate and latency views over every outbound integration request, then used them to catch status updates to a client HRIS being silently dropped — a bug that never logged a single error.</p>
       </div>
     </div>
   </section>
@@ -471,19 +487,19 @@
     <div class="skills-grid">
       <div class="skill-group">
         <h3>Languages</h3>
-        <div class="tags"><span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Java</span><span class="tag">PHP</span></div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">JavaScript</span></div>
       </div>
       <div class="skill-group">
         <h3>Frameworks</h3>
-        <div class="tags"><span class="tag">Django</span><span class="tag">Flask</span><span class="tag">Celery</span><span class="tag">Vue.js</span><span class="tag">React</span></div>
+        <div class="tags"><span class="tag">Django</span><span class="tag">Django REST Framework</span><span class="tag">Flask</span><span class="tag">Celery</span><span class="tag">Vue.js</span><span class="tag">React</span></div>
       </div>
       <div class="skill-group">
-        <h3>Data &amp; infra</h3>
-        <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">Redis</span><span class="tag">AWS</span><span class="tag">AWS SQS</span><span class="tag">Terraform</span><span class="tag">Docker</span></div>
+        <h3>Data &amp; observability</h3>
+        <div class="tags"><span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">OpenSearch</span><span class="tag">Sentry</span><span class="tag">CloudWatch</span></div>
       </div>
       <div class="skill-group">
-        <h3>Tooling</h3>
-        <div class="tags"><span class="tag">Git</span><span class="tag">Sentry</span><span class="tag">GitHub Actions</span><span class="tag">Nginx</span></div>
+        <h3>Cloud &amp; DevOps</h3>
+        <div class="tags"><span class="tag">AWS (EC2, Lambda, SQS, S3)</span><span class="tag">Terraform</span><span class="tag">Packer</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">Nginx</span><span class="tag">Git</span><span class="tag">Claude Code</span></div>
       </div>
     </div>
 
